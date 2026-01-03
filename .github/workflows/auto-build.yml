@@ -16,7 +16,7 @@ on:
         description: "是否在版本末尾追加短 SHA（若已有 +build 会以 .sha 追加）"
         required: false
         default: "true"
-        type: string
+        type: boolean
 
 env:
   ANDROID_NDK_VERSION: r25c

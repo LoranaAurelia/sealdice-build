@@ -1,0 +1,31 @@
+name: Bump submodules
+on:
+  workflow_dispatch:
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+          persist-credentials: true
+
+      - name: Sync .gitmodules to .git/config
+        run: git submodule sync --recursive
+
+      # 按 .gitmodules 里的 branch（你已设为 master）拉到最新提交
+      - name: Update submodules to latest commit on their branches
+        run: git submodule update --init --remote --recursive
+
+      - name: Commit submodule pointers
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add sealdice-ui sealdice-core .gitmodules
+          git commit -m "chore: bump submodules to latest from my forks" || echo "No changes to commit"
+
+      - name: Push changes
+        run: git push

@@ -323,7 +323,7 @@ jobs:
           CUR_TIME: ${{ steps.currentTime.outputs.time }}
           SEAL_TRUSTED_PRIVATE_KEY: ${{ secrets.SEAL_TRUSTED_PRIVATE_KEY }}
         working-directory: ./sealdice-core
-        run: go build -o "output/$BINARY_NAME" -trimpath -ldflags "-s -w -X sealdice-core/dice.VERSION_PRERELEASE=-dev -X sealdice-core/dice.VERSION_BUILD_METADATA=+${CUR_TIME}.${COMMIT_ID::7} -X sealdice-core/dice.APP_CHANNEL=dev -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
+        run: go build -o "output/$BINARY_NAME" -trimpath -ldflags "-s -w -X 'sealdice-core/dice.VERSION_PRERELEASE=${{ steps.ver.outputs.PRERELEASE_WITH_SIGNS }}' -X 'sealdice-core/dice.VERSION_BUILD_METADATA=${{ steps.ver.outputs.BUILD_WITH_SIGNS }}' -X sealdice-core/dice.APP_CHANNEL=dev -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
       - name: Build Binary (linux musl)
         if: matrix.goos == 'linux'
         env:
@@ -335,7 +335,7 @@ jobs:
           CUR_TIME: ${{ steps.currentTime.outputs.time }}
           SEAL_TRUSTED_PRIVATE_KEY: ${{ secrets.SEAL_TRUSTED_PRIVATE_KEY }}
         working-directory: ./sealdice-core
-        run: go build -tags musl -o "output/$BINARY_NAME" -trimpath -ldflags "-s -w -linkmode external -extldflags '-static' -X sealdice-core/dice.VERSION_PRERELEASE=-dev -X sealdice-core/dice.VERSION_BUILD_METADATA=+${CUR_TIME}.${COMMIT_ID::7} -X sealdice-core/dice.APP_CHANNEL=dev -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
+        run: go build -tags musl -o "output/$BINARY_NAME" -trimpath -ldflags "-s -w -linkmode external -extldflags '-static' -X 'sealdice-core/dice.VERSION_PRERELEASE=${{ steps.ver.outputs.PRERELEASE_WITH_SIGNS }}' -X 'sealdice-core/dice.VERSION_BUILD_METADATA=${{ steps.ver.outputs.BUILD_WITH_SIGNS }}' -X sealdice-core/dice.APP_CHANNEL=dev -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
       - name: Run UPX
         uses: crazy-max/ghaction-upx@v3
         with:
@@ -442,7 +442,7 @@ jobs:
           CUR_TIME: ${{ steps.currentTime.outputs.time }}
           SEAL_TRUSTED_PRIVATE_KEY: ${{ secrets.SEAL_TRUSTED_PRIVATE_KEY }}
         working-directory: ./sealdice-core
-        run: go build -o "output/sealdice-core" -trimpath -ldflags "-s -w -X sealdice-core/dice.VERSION_PRERELEASE=-dev -X sealdice-core/dice.VERSION_BUILD_METADATA=+${CUR_TIME}.${COMMIT_ID::7} -X sealdice-core/dice.APP_CHANNEL=dev  -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
+        run: go build -o "output/sealdice-core" -trimpath -ldflags "-s -w -X 'sealdice-core/dice.VERSION_PRERELEASE=${{ steps.ver.outputs.PRERELEASE_WITH_SIGNS }}' -X 'sealdice-core/dice.VERSION_BUILD_METADATA=${{ steps.ver.outputs.BUILD_WITH_SIGNS }}' -X sealdice-core/dice.APP_CHANNEL=dev  -X 'sealdice-core/dice.DefaultSignUrl=${NT_SIGN_URL}' -X 'sealdice-core/dice.SealTrustedClientPrivateKey=${SEAL_TRUSTED_PRIVATE_KEY}'" .
       - name: Upload Core
         uses: actions/upload-artifact@v4
         with:
